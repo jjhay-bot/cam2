@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camera Upload Example</title>
+</head>
+<body>
+  <form action="#" method="post" enctype="multipart/form-data">
+    <canvas id="canvas" style="display: none;"></canvas>
+    <button type="button" onclick="takePicture()">Take Picture</button>
+    <input type="file" style="display: none;" accept="image/*" id="fileInput" name="file">
+    <button type="submit">Upload</button>
+  </form>
+
+  <script>
+    function takePicture() {
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+      
+      // Access the user's camera
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+          const video = document.createElement('video');
+          video.srcObject = stream;
+          video.addEventListener('loadedmetadata', () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            // Stop video stream
+            video.srcObject.getVideoTracks().forEach(track => track.stop());
+            // Show canvas and file input
+            canvas.style.display = 'block';
+            document.getElementById('fileInput').style.display = 'block';
+          });
+          video.play();
+        })
+        .catch(error => {
+          console.error('Error accessing camera:', error);
+        });
+    }
+  </script>
+</body>
+</html>
