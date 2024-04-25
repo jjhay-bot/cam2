@@ -23,6 +23,21 @@
 
   <input type="image/*" capture="filesystem" />
 
+
+<input type="file" id="fileInput">
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var fileInput = document.getElementById('fileInput');
+
+    fileInput.addEventListener('click', function(event) {
+        event.preventDefault();
+        // Open the file picker dialog
+        fileInput.click();
+    });
+});
+</script>
+
   <script>
     function takePicture() {
       const canvas = document.getElementById('canvas');
