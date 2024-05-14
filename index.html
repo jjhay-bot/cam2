@@ -3,26 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>File Upload</title>
+<title>Webcam Capture</title>
 </head>
 <body>
-
-<!-- <input type="file" id="fileInput" style="display: none;"> <!-- Hide the input element --> -->
-<input type="file" id="fileInput" accept="image/*" capture="gallery">
-
-<!-- <label for="fileInput">Choose File</label> <!-- Use a label to trigger the file input --> -->
+<h1>Webcam Capture</h1>
+<div>
+  <video id="video" width="640" height="480" autoplay></video>
+</div>
+<div>
+  <button id="snap">Take Picture</button>
+</div>
+<div>
+  <canvas id="canvas" width="640" height="480"></canvas>
+</div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var fileInput = document.getElementById('fileInput');
+// Get references to elements
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const snapBtn = document.getElementById('snap');
+const context = canvas.getContext('2d');
 
-    fileInput.addEventListener('change', function(event) {
-        var selectedFile = fileInput.files[0];
-        // Handle the selected file here
-        console.log("Selected file:", selectedFile);
-    });
+// Access webcam
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(function(stream) {
+    video.srcObject = stream;
+    video.play();
+  })
+  .catch(function(err) {
+    console.log("An error occurred: " + err);
+  });
+
+// Take picture when the snap button is clicked
+snapBtn.addEventListener('click', function() {
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
 });
-</script>
 
+</script>
 </body>
 </html>
